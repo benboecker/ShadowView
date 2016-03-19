@@ -9,16 +9,21 @@
 import UIKit
 
 @IBDesignable class ShadowView: UIView {
-	var shadowAdded: Bool = false
 	private var shadowView: UIView?
 	
 	@IBInspectable var cornerRadius: CGFloat = 10 {
 		didSet {
-			self.layer.cornerRadius = cornerRadius
-			self.layer.masksToBounds = cornerRadius > 0
-			if let shadowView = self.shadowView {
-				shadowView.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.cornerRadius).CGPath
-			}
+			self.configureShadowView()
+		}
+	}
+	@IBInspectable var shadowOffset: CGSize = CGSize(width: 0.0, height: 1.0) {
+		didSet {
+			self.configureShadowView()
+		}
+	}
+	@IBInspectable var shadowRadius: CGFloat = 1.0 {
+		didSet {
+			self.configureShadowView()
 		}
 	}
 	
@@ -41,15 +46,31 @@ import UIKit
 			return
 		}
 		
+		self.configureShadowView()
+		self.addConstrints()
+		
+		superview.insertSubview(shadowView, belowSubview: self)
+	}
+	
+	private func addConstrints() {
+		
+	}
+	
+	private func configureShadowView() {
+		guard let shadowView = self.shadowView else {
+			return
+		}
+
+		self.layer.cornerRadius = self.cornerRadius
+		self.layer.masksToBounds = self.cornerRadius > 0
+		
 		shadowView.backgroundColor = UIColor.clearColor()
 		shadowView.layer.shadowColor = UIColor.darkGrayColor().CGColor
 		shadowView.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.cornerRadius).CGPath
-		shadowView.layer.shadowOffset = CGSize(width: 0.0, height: 1.0)
+		shadowView.layer.shadowOffset = self.shadowOffset
 		shadowView.layer.shadowOpacity = 0.5
-		shadowView.layer.shadowRadius = 1
-		shadowView.layer.masksToBounds = true
+		shadowView.layer.shadowRadius = self.shadowRadius
+
 		shadowView.clipsToBounds = false
-		
-		superview.insertSubview(shadowView, belowSubview: self)
 	}
 }
