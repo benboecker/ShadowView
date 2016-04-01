@@ -47,20 +47,15 @@ import UIKit
 		}
 		
 		self.configureShadowView()
-		self.addConstrints()
 		
 		superview.insertSubview(shadowView, belowSubview: self)
-	}
-	
-	private func addConstrints() {
-		
 	}
 	
 	private func configureShadowView() {
 		guard let shadowView = self.shadowView else {
 			return
 		}
-
+		
 		self.layer.cornerRadius = self.cornerRadius
 		self.layer.masksToBounds = self.cornerRadius > 0
 		
@@ -70,7 +65,20 @@ import UIKit
 		shadowView.layer.shadowOffset = self.shadowOffset
 		shadowView.layer.shadowOpacity = 0.5
 		shadowView.layer.shadowRadius = self.shadowRadius
-
+		
 		shadowView.clipsToBounds = false
 	}
+	
+	override func layoutSubviews() {
+		super.layoutSubviews()
+		
+		guard let shadowView = self.shadowView else {
+			return
+		}
+		
+		shadowView.frame = self.frame
+		shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: self.cornerRadius).CGPath
+	}
 }
+
+
