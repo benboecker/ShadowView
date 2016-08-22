@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  ShadowView
 //
-//  Created by Benjamin Böcker on 19.03.16.
-//  Copyright © 2016 Ben Böcker. All rights reserved.
+//  Created by Benni on 18.08.16.
+//  Copyright © 2016 Ben Boecker. All rights reserved.
 //
 
 import UIKit
