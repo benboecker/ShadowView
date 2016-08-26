@@ -1,88 +1,82 @@
 //
 //  ShadowView.swift
-//  LinksUndRechts
+//  ShadowView
 //
-//  Created by Benjamin Böcker on 18.03.16.
-//  Copyright © 2016 Stünings Medien. All rights reserved.
+//  Created by Ben Boecker on 18.03.16.
+//  Copyright © 2016 Ben Boecker. All rights reserved.
 //
 
 import UIKit
 
-@IBDesignable class ShadowView: UIView {
-	private var shadowView: UIView?
-
-	@IBInspectable var cornerRadius: CGFloat = 10 {
+class ShadowView: UIView {
+	/// The corner radius of the `ShadowView`, inspectable in Interface Builder
+	@IBInspectable var cornerRadius: CGFloat = 5.0 {
 		didSet {
-			self.configureShadowView()
+			self.updateProperties()
 		}
 	}
-	@IBInspectable var shadowOffset: CGSize = CGSize(width: 0.0, height: 1.0) {
-		didSet {
-			self.configureShadowView()
-		}
-	}
-	@IBInspectable var shadowRadius: CGFloat = 1.0 {
-		didSet {
-			self.configureShadowView()
-		}
-	}
+	/// The shadow color of the `ShadowView`, inspectable in Interface Builder
 	@IBInspectable var shadowColor: UIColor = UIColor.blackColor() {
 		didSet {
-			self.configureShadowView()
+			self.updateProperties()
+		}
+	}
+	/// The shadow offset of the `ShadowView`, inspectable in Interface Builder
+	@IBInspectable var shadowOffset: CGSize = CGSize(width: 0.0, height: 2) {
+		didSet {
+			self.updateProperties()
+		}
+	}
+	/// The shadow radius of the `ShadowView`, inspectable in Interface Builder
+	@IBInspectable var shadowRadius: CGFloat = 4.0 {
+		didSet {
+			self.updateProperties()
+		}
+	}
+	/// The shadow opacity of the `ShadowView`, inspectable in Interface Builder
+	@IBInspectable var shadowOpacity: Float = 0.5 {
+		didSet {
+			self.updateProperties()
 		}
 	}
 
-	override func drawRect(rect: CGRect) {
-		super.drawRect(rect)
+	/**
+	Masks the layer to it's bounds and updates the layer properties and shadow path.
+	*/
+	override func awakeFromNib() {
+		super.awakeFromNib()
 
-		guard let _ = self.shadowView else {
-			self.createShadowView()
-			return
-		}
+		self.layer.masksToBounds = false
+
+		self.updateProperties()
+		self.updateShadowPath()
 	}
 
-	private func createShadowView() {
-		self.shadowView = UIView(frame: self.frame)
-
-		guard let shadowView = self.shadowView else {
-			return
-		}
-		guard let superview = self.superview else {
-			return
-		}
-
-		self.configureShadowView()
-
-		superview.insertSubview(shadowView, belowSubview: self)
-	}
-
-	private func configureShadowView() {
-		guard let shadowView = self.shadowView else {
-			return
-		}
-
+	/**
+	Updates all layer properties according to the public properties of the `ShadowView`.
+	*/
+	private func updateProperties() {
 		self.layer.cornerRadius = self.cornerRadius
-		self.layer.masksToBounds = self.cornerRadius > 0
-
-		shadowView.backgroundColor = UIColor.clearColor()
-		shadowView.layer.shadowColor = self.shadowColor.CGColor
-		shadowView.layer.shadowPath = UIBezierPath(roundedRect: self.bounds, cornerRadius: self.cornerRadius).CGPath
-		shadowView.layer.shadowOffset = self.shadowOffset
-		shadowView.layer.shadowOpacity = 0.5
-		shadowView.layer.shadowRadius = self.shadowRadius
-
-		shadowView.clipsToBounds = false
+		self.layer.shadowColor = self.shadowColor.CGColor
+		self.layer.shadowOffset = self.shadowOffset
+		self.layer.shadowRadius = self.shadowRadius
+		self.layer.shadowOpacity = self.shadowOpacity
 	}
 
+	/**
+	Updates the bezier path of the shadow to be the same as the layer's bounds, taking the layer's corner radius into account.
+	*/
+	private func updateShadowPath() {
+		self.layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).CGPath
+	}
+
+	/**
+	Updates the shadow path everytime the views frame changes.
+	*/
 	override func layoutSubviews() {
 		super.layoutSubviews()
 
-		guard let shadowView = self.shadowView else {
-			return
-		}
-
-		shadowView.frame = self.frame
-		shadowView.layer.shadowPath = UIBezierPath(roundedRect: shadowView.bounds, cornerRadius: self.cornerRadius).CGPath
+		self.updateShadowPath()
 	}
 }
 

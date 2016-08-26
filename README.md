@@ -1,12 +1,8 @@
 # ShadowView
 
-Normally it's not possible to set a corner radius and a shadow on a `UIView` subclass. This is because the property `clipsToBounds` must be set to `true` for the view to render the rounded corners, which also clips the shadow away.
-
 ![Screenshot](https://github.com/bennibrightside/ShadowView/blob/master/screenshot.jpg)
 
-## The solution
-
-This is a `UIView` subclass that allows for setting both a corner radius and a drop shadow. This is done by adding a second private subview that renders the shadow.
+This is a simple `UIView` subclass that allows for setting both a corner radius and a drop shadow. 
 
 ## Installation
 
@@ -14,7 +10,11 @@ Clone or download the repository and and manually add the file `ShadowView.swift
 
 ## Usage
 
-The shadow view can be used with storyboards or be created in code. The properties for `cornerRadius`, `shadowOffset`, `shadowRadius` and `shadowColor` can be set via Interface Builder.
+The shadow view can be used with storyboards or be created in code. The properties for `cornerRadius`, `shadowOffset`, `shadowRadius`, `shadowOpacity` and `shadowColor` can be set via Interface Builder.
+
+## Update 2016-08-26
+
+This new version uses a simpler solution proposed by [wtmoose](https://github.com/wtmoose) in [Issue 1](https://github.com/bennibrightside/ShadowView/issues/1).
 
 ## Contact
 

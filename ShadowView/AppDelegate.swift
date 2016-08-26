@@ -2,7 +2,7 @@
 //  AppDelegate.swift
 //  ShadowView
 //
-//  Created by Benni on 18.08.16.
+//  Created by Ben Boecker on 18.08.16.
 //  Copyright © 2016 Ben Boecker. All rights reserved.
 //
 
