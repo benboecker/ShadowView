@@ -25,10 +25,11 @@ class ViewController: UIViewController {
 		// Dispose of any resources that can be recreated.
 	}
 	
-	override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+	override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
 		guard let touch = touches.first else {
 			return
 		}
+		
 		UIView.animateWithDuration(0.5) {
 			self.shadowView?.center = touch.locationInView(self.view)
 		}

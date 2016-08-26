@@ -11,6 +11,9 @@ import UIKit
 @IBDesignable public class ShadowView: UIView {
 	private var _useSuperAddsubview = true
 	
+	// MARK: - Lazy variables
+	// ____________________________________________________________________________________________________________________
+	
 	lazy private var containerView: UIView = {
 		let v = UIView()
 		v.clipsToBounds = true
@@ -20,42 +23,41 @@ import UIKit
 		return v
 	}()
 	
+	// MARK: - @IBInspectable
+	// ____________________________________________________________________________________________________________________
 	
-
 	@IBInspectable public var cornerRadius: CGFloat = 10 {
 		didSet {
-			self.configureShadowView()
+			containerView.layer.cornerRadius = cornerRadius
 		}
 	}
-	@IBInspectable public var shadowOffset: CGSize = CGSize(width: 0.0, height: 1.0) {
+	
+	@IBInspectable public var shadowOffset: CGSize = CGSizeZero {
 		didSet {
-			self.configureShadowView()
+			self.layer.shadowOffset = shadowOffset
 		}
 	}
-	@IBInspectable public var shadowRadius: CGFloat = 1.0 {
+	
+	@IBInspectable public var shadowOpacity: CGFloat = 0.5 {
 		didSet {
-			self.configureShadowView()
+			self.layer.shadowOpacity = Float(shadowOpacity)
 		}
 	}
+	
+	@IBInspectable public var shadowRadius: CGFloat = 2.0 {
+		didSet {
+			self.layer.shadowRadius = shadowRadius
+		}
+	}
+	
 	@IBInspectable public var shadowColor: UIColor = UIColor.blackColor() {
 		didSet {
-			self.configureShadowView()
+			self.layer.shadowColor = shadowColor.CGColor
 		}
 	}
 	
-	override public init(frame: CGRect) {
-		super.init(frame: frame)
-	}
-	
-	required public init?(coder aDecoder: NSCoder) {
-		super.init(coder: aDecoder)
-		let childViews = self.subviews.filter { $0 != containerView }
-		for child in childViews {
-			containerView.addSubview(child)
-		}
-		containerView.backgroundColor = backgroundColor
-		super.backgroundColor = UIColor.clearColor()
-	}
+	// MARK: - Public variables
+	// ____________________________________________________________________________________________________________________
 	
 	override public var backgroundColor: UIColor? {
 		get {
@@ -67,21 +69,60 @@ import UIKit
 		}
 	}
 	
-	private func configureShadowView() {
+	override public var clipsToBounds: Bool {
+		get {
+			return false
+		}
+		set {
+			super.clipsToBounds = false
+		}
+	}
+	
+	// MARK: - Constructor
+	// ____________________________________________________________________________________________________________________
+	
+	convenience init() {
+		self.init(frame: CGRectZero)
+		setup()
+	}
+	
+	override public init(frame: CGRect) {
+		super.init(frame: frame)
+		setup()
+	}
+	
+	required public init?(coder aDecoder: NSCoder) {
+		super.init(coder: aDecoder)
+		let childViews = self.subviews.filter { $0 != containerView }
+		for child in childViews {
+			containerView.addSubview(child)
+		}
+		containerView.backgroundColor = backgroundColor
+		super.backgroundColor = UIColor.clearColor()
+		setup()
+	}
+}
+
+typealias ShadowView_Helpers = ShadowView
+extension ShadowView_Helpers {
+	private func setup() {
 		self.clipsToBounds = false
 		containerView.layer.cornerRadius = cornerRadius
-		
 		self.layer.shadowColor = shadowColor.CGColor
-		self.layer.shadowOffset = self.shadowOffset
-		self.layer.shadowOpacity = 0.5
-		self.layer.shadowRadius = self.shadowRadius
+		self.layer.shadowRadius = shadowRadius
+		self.layer.shadowOpacity = Float(shadowOpacity)
+		self.layer.shadowOffset = shadowOffset
 	}
+}
 
+typealias ShadowView_Override = ShadowView
+extension ShadowView_Override {
+	
 	override public func addSubview(view: UIView) {
-		if (!_useSuperAddsubview) {
-			containerView.addSubview(view)
-		} else {
+		if (_useSuperAddsubview) {
 			super.addSubview(view)
+		} else {
+			containerView.addSubview(view)
 		}
 	}
 	
