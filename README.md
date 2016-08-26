@@ -14,7 +14,7 @@ Clone or download the repository and and manually add the file `ShadowView.swift
 
 ## Usage
 
-The shadow view can be used with storyboards or be created in code. The properties for `cornerRadius`, `shadowOffset`, `shadowRadius` and `shadowColor` can be set via Interface Builder.
+The shadow view can be used with storyboards or be created in code. The properties for `cornerRadius`, `shadowOffset`, `shadowOpacity`, `shadowRadius` and `shadowColor` can be set via Interface Builder.
 
 ## Contact
 
