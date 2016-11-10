@@ -16,7 +16,7 @@ class ShadowView: UIView {
 		}
 	}
 	/// The shadow color of the `ShadowView`, inspectable in Interface Builder
-	@IBInspectable var shadowColor: UIColor = UIColor.blackColor() {
+	@IBInspectable var shadowColor: UIColor = UIColor.black {
 		didSet {
 			self.updateProperties()
 		}
@@ -55,9 +55,9 @@ class ShadowView: UIView {
 	/**
 	Updates all layer properties according to the public properties of the `ShadowView`.
 	*/
-	private func updateProperties() {
+	fileprivate func updateProperties() {
 		self.layer.cornerRadius = self.cornerRadius
-		self.layer.shadowColor = self.shadowColor.CGColor
+		self.layer.shadowColor = self.shadowColor.cgColor
 		self.layer.shadowOffset = self.shadowOffset
 		self.layer.shadowRadius = self.shadowRadius
 		self.layer.shadowOpacity = self.shadowOpacity
@@ -66,8 +66,8 @@ class ShadowView: UIView {
 	/**
 	Updates the bezier path of the shadow to be the same as the layer's bounds, taking the layer's corner radius into account.
 	*/
-	private func updateShadowPath() {
-		self.layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).CGPath
+	fileprivate func updateShadowPath() {
+		self.layer.shadowPath = UIBezierPath(roundedRect: layer.bounds, cornerRadius: layer.cornerRadius).cgPath
 	}
 
 	/**
